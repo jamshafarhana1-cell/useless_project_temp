@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>😤 Anger Dump</title>
+
+
+  <style>
+
+    /* ========================================
+       RESET
+    ======================================== */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    /* ========================================
+       VARIABLES
+    ======================================== */
+
+    :root {
+      --red: #ff4757;
+      --dark-red: #e84118;
+      --orange: #ff9f43;
+      --green: #2ed573;
+      --purple: #9b59b6;
+      --blue: #3498db;
+
+      --dark: #080808;
+      --card: #171717;
+      --card2: #222;
+
+      --text: #ffffff;
+      --muted: #aaaaaa;
+    }
+
+
+    /* ========================================
+       BODY
+    ======================================== */
+
+    body {
+
+      min-height: 100vh;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      color: var(--text);
+
+      text-align: center;
+
+      background:
+        radial-gradient(
+          circle at top,
+          #351010 0%,
+          #111 35%,
+          #050505 100%
+        );
+
+      overflow-x: hidden;
+
+      transition:
+        background-color .3s ease;
+    }
+
+
+    /* ========================================
+       HEADER
+    ======================================== */
+
+    header {
+      padding: 35px 20px 20px;
+    }
+
+
+    .logo {
+
+      font-size: 55px;
+
+      animation:
+        angry 1.2s infinite alternate;
+
+    }
+
+
+    @keyframes angry {
+
+      from {
+        transform:
+          rotate(-5deg)
+          scale(1);
+      }
+
+      to {
+        transform:
+          rotate(5deg)
+          scale(1.08);
+      }
+
+    }
+
+
+    h1 {
+
+      font-size:
+        clamp(35px, 8vw, 65px);
+
+      margin: 5px 0;
+
+      font-weight: 900;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ff4757,
+          #ff9f43,
+          #ff4757
+        );
+
+      background-size: 200%;
+
+      color: transparent;
+
+      background-clip: text;
+      -webkit-background-clip: text;
+
+      animation:
+        gradient 3s linear infinite;
+
+    }
+
+
+    @keyframes gradient {
+
+      0% {
+        background-position: 0%;
+      }
+
+      100% {
+        background-position: 200%;
+      }
+
+    }
+
+
+    header p {
+
+      color: var(--muted);
+
+      font-size: 16px;
+
+      margin-top: 8px;
+
+    }
+
+
+    /* ========================================
+       UPLOAD
+    ======================================== */
+
+    .upload-area {
+
+      margin: 20px auto;
+
+      padding:
+        0 20px;
+
+    }
+
+
+    input[type="file"] {
+      display: none;
+    }
+
+
+    .upload-label {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 10px;
+
+      padding:
+        15px 25px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--red),
+          var(--dark-red)
+        );
+
+      border-radius: 14px;
+
+      cursor: pointer;
+
+      font-size: 17px;
+
+      font-weight: bold;
+
+      box-shadow:
+        0 8px 25px
+        rgba(255, 71, 87, .3);
+
+      transition: .25s;
+
+    }
+
+
+    .upload-label:hover {
+
+      transform:
+        translateY(-3px)
+        scale(1.03);
+
+      box-shadow:
+        0 12px 35px
+        rgba(255, 71, 87, .45);
+
+    }
+
+
+    /* ========================================
+       GAME
+    ======================================== */
+
+    #game {
+
+      display: none;
+
+      width:
+        min(95%, 900px);
+
+      margin:
+        25px auto
+        50px;
+
+    }
+
+
+    .game-card {
+
+      background:
+        rgba(23, 23, 23, .9);
+
+      border:
+        1px solid #333;
+
+      border-radius: 25px;
+
+      padding: 25px;
+
+      box-shadow:
+        0 20px 70px
+        rgba(0, 0, 0, .5);
+
+      backdrop-filter:
+        blur(10px);
+
+    }
+
+
+    /* ========================================
+       STATS
+    ======================================== */
+
+    .stats {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 12px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .stat {
+
+      background:
+        var(--card2);
+
+      border-radius: 15px;
+
+      padding:
+        15px 8px;
+
+      border:
+        1px solid #333;
+
+    }
+
+
+    .stat-value {
+
+      display: block;
+
+      font-size: 25px;
+
+      font-weight: bold;
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .stat-label {
+
+      color: #888;
+
+      font-size: 12px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    /* ========================================
+       PHOTO
+    ======================================== */
+
+    #photoBox {
+
+      width:
+        min(100%, 500px);
+
+      height:
+        min(70vw, 500px);
+
+      min-height: 280px;
+
+      margin: auto;
+
+      border-radius: 22px;
+
+      overflow: hidden;
+
+      background: #111;
+
+      position: relative;
+
+      border:
+        3px solid #444;
+
+      box-shadow:
+        0 0 0 5px
+        rgba(255, 71, 87, .05),
+
+        0 15px 50px
+        rgba(0, 0, 0, .6);
+
+    }
+
+
+    #photo {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+      display: block;
+
+    }
+
+
+    /* ========================================
+       HIT EMOJI
+    ======================================== */
+
+    #emoji {
+
+      position: absolute;
+
+      font-size:
+        clamp(55px, 12vw, 100px);
+
+      display: none;
+
+      pointer-events: none;
+
+      z-index: 10;
+
+      filter:
+        drop-shadow(
+          0 5px 5px
+          rgba(0, 0, 0, .5)
+        );
+
+    }
+
+
+    .hit-animation {
+
+      animation:
+        hit .5s ease;
+
+    }
+
+
+    @keyframes hit {
+
+      0% {
+
+        transform:
+          scale(.3)
+          rotate(-30deg);
+
+        opacity: 0;
+
+      }
+
+      40% {
+
+        transform:
+          scale(1.5)
+          rotate(20deg);
+
+        opacity: 1;
+
+      }
+
+      70% {
+
+        transform:
+          scale(1.1)
+          rotate(-10deg);
+
+      }
+
+      100% {
+
+        transform:
+          scale(1)
+          rotate(0);
+
+        opacity: 0;
+
+      }
+
+    }
+
+
+    /* ========================================
+       FLASH
+    ======================================== */
+
+    .flash {
+
+      animation:
+        flash .2s ease;
+
+    }
+
+
+    @keyframes flash {
+
+      0% {
+        filter:
+          brightness(1);
+      }
+
+      50% {
+        filter:
+          brightness(2);
+      }
+
+      100% {
+        filter:
+          brightness(1);
+      }
+
+    }
+
+
+    /* ========================================
+       ANGER BAR
+    ======================================== */
+
+    .anger-title {
+
+      margin-top: 25px;
+
+      margin-bottom: 8px;
+
+      font-weight: bold;
+
+    }
+
+
+    #anger {
+
+      width: 100%;
+
+      height: 25px;
+
+      background: #333;
+
+      border-radius: 30px;
+
+      overflow: hidden;
+
+      border:
+        2px solid #444;
+
+    }
+
+
+    #angerBar {
+
+      width: 0%;
+
+      height: 100%;
+
+      background:
+        linear-gradient(
+          90deg,
+          #2ed573,
+          #ffa502,
+          #ff4757,
+          #ff0000
+        );
+
+      transition:
+        width .25s ease;
+
+      position: relative;
+
+    }
+
+
+    #angerBar::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,.35),
+          transparent
+        );
+
+      animation:
+        shine 1.2s linear infinite;
+
+    }
+
+
+    @keyframes shine {
+
+      from {
+        transform:
+          translateX(-100%);
+      }
+
+      to {
+        transform:
+          translateX(100%);
+      }
+
+    }
+
+
+    #angerPercent {
+
+      margin-top: 7px;
+
+      color: #aaa;
+
+      font-size: 14px;
+
+    }
+
+
+    /* ========================================
+       ATTACK BUTTONS
+    ======================================== */
+
+    .buttons {
+
+      margin-top: 25px;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(5, 1fr);
+
+      gap: 10px;
+
+    }
+
+
+    button {
+
+      border: none;
+
+      color: white;
+
+      padding:
+        16px 8px;
+
+      border-radius: 15px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition: .18s;
+
+    }
+
+
+    button:hover {
+
+      transform:
+        translateY(-4px)
+        scale(1.03);
+
+    }
+
+
+    button:active {
+
+      transform:
+        scale(.94);
+
+    }
+
+
+    .attack {
+
+      box-shadow:
+        0 7px 20px
+        rgba(255, 71, 87, .25);
+
+    }
+
+
+    .pillow {
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff4757,
+          #c0392b
+        );
+
+    }
+
+
+    .tomato {
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff6348,
+          #e55039
+        );
+
+    }
+
+
+    .chicken {
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffa502,
+          #e67e22
+        );
+
+    }
+
+
+    .water {
+
+      background:
+        linear-gradient(
+          135deg,
+          #3498db,
+          #2980b9
+        );
+
+    }
+
+
+    .hammer {
+
+      background:
+        linear-gradient(
+          135deg,
+          #9b59b6,
+          #6c3483
+        );
+
+      box-shadow:
+        0 7px 25px
+        rgba(155, 89, 182, .4);
+
+    }
+
+
+    .hammer:hover {
+
+      background:
+        linear-gradient(
+          135deg,
+          #af68cc,
+          #7d3c98
+        );
+
+    }
+
+
+    /* ========================================
+       MESSAGE
+    ======================================== */
+
+    #message {
+
+      min-height: 45px;
+
+      margin-top: 20px;
+
+      font-size: 21px;
+
+      font-weight: bold;
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .complete {
+
+      font-size:
+        26px !important;
+
+      color:
+        var(--green) !important;
+
+      animation:
+        pop .5s ease;
+
+    }
+
+
+    @keyframes pop {
+
+      0% {
+        transform:
+          scale(.5);
+      }
+
+      70% {
+        transform:
+          scale(1.15);
+      }
+
+      100% {
+        transform:
+          scale(1);
+      }
+
+    }
+
+
+    /* ========================================
+       CONTROLS
+    ======================================== */
+
+    .controls {
+
+      margin-top: 20px;
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+    }
+
+
+    .reset-btn {
+
+      background: #333;
+
+    }
+
+
+    .reset-btn:hover {
+
+      background: #444;
+
+    }
+
+
+    .remove-btn {
+
+      background:
+        #8e44ad;
+
+    }
+
+
+    /* ========================================
+       HISTORY
+    ======================================== */
+
+    .history {
+
+      margin-top: 25px;
+
+      text-align: left;
+
+      background: #111;
+
+      border-radius: 15px;
+
+      padding: 15px;
+
+      border:
+        1px solid #292929;
+
+    }
+
+
+    .history h3 {
+
+      margin-bottom: 10px;
+
+      text-align: center;
+
+    }
+
+
+    #historyList {
+
+      list-style: none;
+
+      max-height: 140px;
+
+      overflow-y: auto;
+
+    }
+
+
+    #historyList li {
+
+      padding: 8px;
+
+      border-bottom:
+        1px solid #292929;
+
+      color: #bbb;
+
+      font-size: 14px;
+
+    }
+
+
+    /* ========================================
+       FULL ANGER
+    ======================================== */
+
+    .rage {
+
+      animation:
+        rageScreen .35s infinite alternate;
+
+    }
+
+
+    @keyframes rageScreen {
+
+      from {
+        background-color:
+          #080808;
+      }
+
+      to {
+        background-color:
+          #250000;
+      }
+
+    }
+
+
+    /* ========================================
+       FOOTER
+    ======================================== */
+
+    footer {
+
+      color: #555;
+
+      font-size: 13px;
+
+      padding: 20px;
+
+    }
+
+
+    /* ========================================
+       MOBILE
+    ======================================== */
+
+    @media (max-width: 750px) {
+
+      .buttons {
+
+        grid-template-columns:
+          repeat(2, 1fr);
+
+      }
+
+    }
+
+
+    @media (max-width: 650px) {
+
+      .game-card {
+
+        padding: 15px;
+
+        border-radius: 20px;
+
+      }
+
+
+      .stats {
+
+        gap: 7px;
+
+      }
+
+
+      .stat {
+
+        padding:
+          10px 5px;
+
+      }
+
+
+      .stat-value {
+
+        font-size: 21px;
+
+      }
+
+
+      #photoBox {
+
+        min-height: 260px;
+
+      }
+
+    }
+
+
+    @media (max-width: 380px) {
+
+      .buttons {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .upload-label {
+
+        width: 100%;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- ========================================
+       HEADER
+  ======================================== -->
+
+  <header>
+
+    <div class="logo">
+      😤
+    </div>
+
+    <h1>
+      ANGER DUMP
+    </h1>
+
+    <p>
+      Upload a photo and release your useless anger 😂
+    </p>
+
+  </header>
+
+
+  <!-- ========================================
+       UPLOAD
+  ======================================== -->
+
+  <div class="upload-area">
+
+    <label class="upload-label">
+
+      📸 Choose Photo
+
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+      >
+
+    </label>
+
+  </div>
+
+
+  <!-- ========================================
+       GAME
+  ======================================== -->
+
+  <main id="game">
+
+    <div class="game-card">
+
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+
+          <span
+            class="stat-value"
+            id="score"
+          >
+            0
+          </span>
+
+          <span class="stat-label">
+            Score
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span
+            class="stat-value"
+            id="hits"
+          >
+            0
+          </span>
+
+          <span class="stat-label">
+            Hits
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <span
+            class="stat-value"
+            id="combo"
+          >
+            0
+          </span>
+
+          <span class="stat-label">
+            Combo
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- PHOTO -->
+
+      <div id="photoBox">
+
+        <img
+          id="photo"
+          alt="Uploaded photo"
+        >
+
+        <div id="emoji"></div>
+
+      </div>
+
+
+      <!-- ANGER -->
+
+      <div class="anger-title">
+        🔥 ANGER LEVEL
+      </div>
+
+
+      <div id="anger">
+
+        <div id="angerBar"></div>
+
+      </div>
+
+
+      <div id="angerPercent">
+        0% Angry
+      </div>
+
+
+      <!-- ATTACKS -->
+
+      <div class="buttons">
+
+
+        <button
+          class="attack pillow"
+          data-icon="🛏️"
+          data-text="Pillow Attack!"
+          data-power="10"
+        >
+          🛏️<br>
+          Pillow
+        </button>
+
+
+        <button
+          class="attack tomato"
+          data-icon="🍅"
+          data-text="Tomato Attack!"
+          data-power="10"
+        >
+          🍅<br>
+          Tomato
+        </button>
+
+
+        <button
+          class="attack chicken"
+          data-icon="🐔"
+          data-text="HONK HONK! Chicken Attack!"
+          data-power="15"
+        >
+          🐔<br>
+          Chicken
+        </button>
+
+
+        <button
+          class="attack water"
+          data-icon="💦"
+          data-text="Water Balloon!"
+          data-power="10"
+        >
+          💦<br>
+          Water
+        </button>
+
+
+        <button
+          class="attack hammer"
+          data-icon="🔨"
+          data-text="HAMMER BEAT!!!"
+          data-power="20"
+        >
+          🔨<br>
+          Hammer Beat
+        </button>
+
+
+      </div>
+
+
+      <!-- MESSAGE -->
+
+      <div id="message">
+        Choose your weapon! 😈
+      </div>
+
+
+      <!-- CONTROLS -->
+
+      <div class="controls">
+
+        <button
+          class="reset-btn"
+          id="resetBtn"
+        >
+          🔄 Reset Anger
+        </button>
+
+
+        <button
+          class="remove-btn"
+          id="removeBtn"
+        >
+          🗑️ Remove Photo
+        </button>
+
+      </div>
+
+
+      <!-- HISTORY -->
+
+      <div class="history">
+
+        <h3>
+          📜 Attack History
+        </h3>
+
+        <ul id="historyList">
+
+          <li>
+            No attacks yet...
+          </li>
+
+        </ul>
+
+      </div>
+
+
+    </div>
+
+  </main>
+
+
+  <footer>
+
+    Made with 😤 + 😂 |
+    Anger Dump
+
+  </footer>
+
+
+  <!-- ========================================
+       JAVASCRIPT
+  ======================================== -->
+
+  <script>
+
+    /* ========================================
+       ELEMENTS
+    ======================================== */
+
+    const fileInput =
+      document.getElementById("fileInput");
+
+    const photo =
+      document.getElementById("photo");
+
+    const game =
+      document.getElementById("game");
+
+    const photoBox =
+      document.getElementById("photoBox");
+
+    const emoji =
+      document.getElementById("emoji");
+
+    const message =
+      document.getElementById("message");
+
+    const angerBar =
+      document.getElementById("angerBar");
+
+    const angerPercent =
+      document.getElementById("angerPercent");
+
+    const scoreElement =
+      document.getElementById("score");
+
+    const hitsElement =
+      document.getElementById("hits");
+
+    const comboElement =
+      document.getElementById("combo");
+
+    const historyList =
+      document.getElementById("historyList");
+
+    const resetBtn =
+      document.getElementById("resetBtn");
+
+    const removeBtn =
+      document.getElementById("removeBtn");
+
+    const attackButtons =
+      document.querySelectorAll(".attack");
+
+
+    /* ========================================
+       GAME VARIABLES
+    ======================================== */
+
+    let anger = 0;
+
+    let score = 0;
+
+    let hits = 0;
+
+    let combo = 0;
+
+    let lastHitTime = 0;
+
+
+    /* ========================================
+       PHOTO UPLOAD
+    ======================================== */
+
+    fileInput.addEventListener(
+      "change",
+      function () {
+
+        const file =
+          this.files[0];
+
+        if (!file) {
+          return;
+        }
+
+
+        if (
+          !file.type.startsWith(
+            "image/"
+          )
+        ) {
+
+          alert(
+            "Please select an image!"
+          );
+
+          fileInput.value = "";
+
+          return;
+        }
+
+
+        if (
+          file.size >
+          10 * 1024 * 1024
+        ) {
+
+          alert(
+            "Image is too large. " +
+            "Please choose an image under 10MB."
+          );
+
+          fileInput.value = "";
+
+          return;
+        }
+
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          function (event) {
+
+            photo.src =
+              event.target.result;
+
+            game.style.display =
+              "block";
+
+            resetGame();
+
+            message.innerText =
+              "Photo loaded! " +
+              "Now release your anger! 😈";
+
+
+            setTimeout(
+              function () {
+
+                window.scrollTo({
+
+                  top:
+                    game.offsetTop - 20,
+
+                  behavior:
+                    "smooth"
+
+                });
+
+              },
+              100
+            );
+
+          };
+
+
+        reader.onerror =
+          function () {
+
+            alert(
+              "Could not read the image."
+            );
+
+          };
+
+
+        reader.readAsDataURL(
+          file
+        );
+
+      }
+    );
+
+
+    /* ========================================
+       ATTACK BUTTONS
+    ======================================== */
+
+    attackButtons.forEach(
+      function (button) {
+
+        button.addEventListener(
+          "click",
+          function () {
+
+            const icon =
+              this.dataset.icon ||
+              "💥";
+
+
+            const text =
+              this.dataset.text ||
+              "Attack!";
+
+
+            const power =
+              Number(
+                this.dataset.power
+              ) || 10;
+
+
+            action(
+              icon,
+              text,
+              power
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+    /* ========================================
+       ATTACK
+    ======================================== */
+
+    function action(
+      icon,
+      text,
+      power
+    ) {
+
+      if (anger >= 100) {
+
+        message.innerText =
+          "😂 Your anger tank is already EMPTY!";
+
+        return;
+      }
+
+
+      const now =
+        Date.now();
+
+
+      /* Combo */
+
+      if (
+        lastHitTime !== 0 &&
+        now - lastHitTime <
+          1500
+      ) {
+
+        combo++;
+
+      } else {
+
+        combo = 1;
+
+      }
+
+
+      lastHitTime =
+        now;
+
+
+      /* Anger */
+
+      anger += power;
+
+
+      if (anger > 100) {
+
+        anger = 100;
+
+      }
+
+
+      /* Stats */
+
+      hits++;
+
+      score +=
+        power * combo;
+
+
+      updateUI();
+
+
+      showHit(icon);
+
+
+      if (anger < 100) {
+
+        message.innerText =
+          text +
+          " +" +
+          power +
+          "% 🔥";
+
+      }
+
+
+      addHistory(
+        icon +
+        " " +
+        text +
+        " +" +
+        power +
+        "%"
+      );
+
+
+      /* Sound */
+
+      if (power >= 20) {
+
+        playHammerSound();
+
+      } else {
+
+        playSound(
+          power >= 15
+            ? 180
+            : 250
+        );
+
+      }
+
+
+      if (anger >= 100) {
+
+        finishGame();
+
+      }
+
+    }
+
+
+    /* ========================================
+       UPDATE UI
+    ======================================== */
+
+    function updateUI() {
+
+      angerBar.style.width =
+        anger + "%";
+
+
+      angerPercent.innerText =
+        anger + "% Angry";
+
+
+      scoreElement.innerText =
+        score;
+
+
+      hitsElement.innerText =
+        hits;
+
+
+      comboElement.innerText =
+        combo;
+
+    }
+
+
+    /* ========================================
+       SHOW HIT
+    ======================================== */
+
+    function showHit(icon) {
+
+      emoji.innerText =
+        icon;
+
+
+      emoji.style.display =
+        "block";
+
+
+      const emojiSize =
+        110;
+
+
+      const maxX =
+        Math.max(
+          10,
+          photoBox.clientWidth -
+            emojiSize
+        );
+
+
+      const maxY =
+        Math.max(
+          10,
+          photoBox.clientHeight -
+            emojiSize
+        );
+
+
+      emoji.style.left =
+        Math.random() *
+          maxX +
+        "px";
+
+
+      emoji.style.top =
+        Math.random() *
+          maxY +
+        "px";
+
+
+      emoji.classList.remove(
+        "hit-animation"
+      );
+
+
+      void emoji.offsetWidth;
+
+
+      emoji.classList.add(
+        "hit-animation"
+      );
+
+
+      photoBox.classList.remove(
+        "flash"
+      );
+
+
+      void photoBox.offsetWidth;
+
+
+      photoBox.classList.add(
+        "flash"
+      );
+
+    }
+
+
+    /* ========================================
+       HISTORY
+    ======================================== */
+
+    function addHistory(text) {
+
+      if (
+        historyList.children
+          .length === 1 &&
+        historyList.children[0]
+          .innerText ===
+          "No attacks yet..."
+      ) {
+
+        historyList.innerHTML =
+          "";
+
+      }
+
+
+      const li =
+        document.createElement(
+          "li"
+        );
+
+
+      const time =
+        new Date()
+          .toLocaleTimeString();
+
+
+      li.innerText =
+        time +
+        " — " +
+        text;
+
+
+      historyList.prepend(li);
+
+
+      while (
+        historyList.children
+          .length > 20
+      ) {
+
+        historyList.removeChild(
+          historyList.lastChild
+        );
+
+      }
+
+    }
+
+
+    /* ========================================
+       FINISH
+    ======================================== */
+
+    function finishGame() {
+
+      document.body.classList.add(
+        "rage"
+      );
+
+
+      message.classList.add(
+        "complete"
+      );
+
+
+      message.innerText =
+        "😂 CONGRATULATIONS! " +
+        "YOU WASTED ALL YOUR ANGER! 🎉";
+
+
+      playFinishSound();
+
+
+      setTimeout(
+        function () {
+
+          document.body.classList.remove(
+            "rage"
+          );
+
+        },
+        1200
+      );
+
+    }
+
+
+    /* ========================================
+       RESET
+    ======================================== */
+
+    function resetGame() {
+
+      anger = 0;
+
+      score = 0;
+
+      hits = 0;
+
+      combo = 0;
+
+      lastHitTime = 0;
+
+
+      updateUI();
+
+
+      message.classList.remove(
+        "complete"
+      );
+
+
+      message.innerText =
+        "Choose your weapon! 😈";
+
+
+      historyList.innerHTML =
+        "<li>No attacks yet...</li>";
+
+
+      document.body.classList.remove(
+        "rage"
+      );
+
+
+      emoji.style.display =
+        "none";
+
+    }
+
+
+    resetBtn.addEventListener(
+      "click",
+      resetGame
+    );
+
+
+    /* ========================================
+       REMOVE PHOTO
+    ======================================== */
+
+    removeBtn.addEventListener(
+      "click",
+      function () {
+
+        photo.src = "";
+
+        fileInput.value = "";
+
+        game.style.display =
+          "none";
+
+
+        resetGame();
+
+
+        window.scrollTo({
+
+          top: 0,
+
+          behavior:
+            "smooth"
+
+        });
+
+      }
+    );
+
+
+    /* ========================================
+       NORMAL SOUND
+    ======================================== */
+
+    function playSound(
+      frequency
+    ) {
+
+      try {
+
+        const AudioContext =
+          window.AudioContext ||
+          window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+          return;
+        }
+
+
+        const audio =
+          new AudioContext();
+
+
+        const oscillator =
+          audio.createOscillator();
+
+
+        const gain =
+          audio.createGain();
+
+
+        oscillator.type =
+          "square";
+
+
+        oscillator.frequency.setValueAtTime(
+          frequency,
+          audio.currentTime
+        );
+
+
+        gain.gain.setValueAtTime(
+          0.08,
+          audio.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audio.currentTime + 0.15
+        );
+
+
+        oscillator.connect(
+          gain
+        );
+
+
+        gain.connect(
+          audio.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+          audio.currentTime + 0.15
+        );
+
+      } catch (error) {
+
+        console.log(
+          "Audio unavailable:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* ========================================
+       HAMMER SOUND
+    ======================================== */
+
+    function playHammerSound() {
+
+      try {
+
+        const AudioContext =
+          window.AudioContext ||
+          window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+          return;
+        }
+
+
+        const audio =
+          new AudioContext();
+
+
+        const oscillator =
+          audio.createOscillator();
+
+
+        const gain =
+          audio.createGain();
+
+
+        oscillator.type =
+          "sawtooth";
+
+
+        oscillator.frequency.setValueAtTime(
+          120,
+          audio.currentTime
+        );
+
+
+        oscillator.frequency.exponentialRampToValueAtTime(
+          45,
+          audio.currentTime + 0.3
+        );
+
+
+        gain.gain.setValueAtTime(
+          0.2,
+          audio.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audio.currentTime + 0.3
+        );
+
+
+        oscillator.connect(
+          gain
+        );
+
+
+        gain.connect(
+          audio.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+          audio.currentTime + 0.3
+        );
+
+      } catch (error) {
+
+        console.log(
+          "Hammer sound unavailable:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* ========================================
+       FINISH SOUND
+    ======================================== */
+
+    function playFinishSound() {
+
+      try {
+
+        const AudioContext =
+          window.AudioContext ||
+          window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+          return;
+        }
+
+
+        const audio =
+          new AudioContext();
+
+
+        const notes = [
+          300,
+          400,
+          500,
+          700
+        ];
+
+
+        notes.forEach(
+          function (
+            frequency,
+            index
+          ) {
+
+            const oscillator =
+              audio.createOscillator();
+
+
+            const gain =
+              audio.createGain();
+
+
+            const startTime =
+              audio.currentTime +
+              index * 0.12;
+
+
+            oscillator.type =
+              "sine";
+
+
+            oscillator.frequency.setValueAtTime(
+              frequency,
+              startTime
+            );
+
+
+            gain.gain.setValueAtTime(
+              0.08,
+              startTime
+            );
+
+
+            gain.gain.exponentialRampToValueAtTime(
+              0.001,
+              startTime + 0.15
+            );
+
+
+            oscillator.connect(
+              gain
+            );
+
+
+            gain.connect(
+              audio.destination
+            );
+
+
+            oscillator.start(
+              startTime
+            );
+
+
+            oscillator.stop(
+              startTime + 0.15
+            );
+
+          }
+        );
+
+      } catch (error) {
+
+        console.log(
+          "Finish sound unavailable:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* ========================================
+       KEYBOARD CONTROLS
+    ======================================== */
+
+    document.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          game.style.display ===
+          "none"
+        ) {
+
+          return;
+
+        }
+
+
+        switch (
+          event.key.toLowerCase()
+        ) {
+
+          case "1":
+
+            action(
+              "🛏️",
+              "Pillow Attack!",
+              10
+            );
+
+            break;
+
+
+          case "2":
+
+            action(
+              "🍅",
+              "Tomato Attack!",
+              10
+            );
+
+            break;
+
+
+          case "3":
+
+            action(
+              "🐔",
+              "HONK HONK! Chicken Attack!",
+              15
+            );
+
+            break;
+
+
+          case "4":
+
+            action(
+              "💦",
+              "Water Balloon!",
+              10
+            );
+
+            break;
+
+
+          case "5":
+
+            action(
+              "🔨",
+              "HAMMER BEAT!!!",
+              20
+            );
+
+            break;
+
+
+          case "r":
+
+            resetGame();
+
+            break;
+
+        }
+
+      }
+    );
+
+
+    /* ========================================
+       START
+    ======================================== */
+
+    updateUI();
+
+  </script>
+
+</body>
+
+</html>

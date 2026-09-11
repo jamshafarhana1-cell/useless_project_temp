@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>DASH RUNNER 3D: HARD MODE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap');
+
+  :root{
+    --sky-top: #7A1F2B;
+    --sky-bot: #FF9F4D;
+    --panel: rgba(15, 26, 38, 0.78);
+    --gold: #FFC857;
+    --cyan: #4FE0D0;
+    --hot: #FF5A5F;
+    --text: #F4F8FB;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bot) 100%);
+    font-family: 'Space Mono', monospace;
+    color: var(--text);
+    touch-action: none;
+  }
+
+  #gameCanvas {
+    position: fixed;
+    inset: 0;
+    display: block;
+  }
+
+  .hud {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .top-bar {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .stat-panel {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 8px 14px;
+    backdrop-filter: blur(3px);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .stat-panel .label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--cyan);
+  }
+  .stat-panel .value {
+    font-family: 'Bungee', cursive;
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  .stat-panel.coins .value { color: var(--gold); }
+
+  .best-panel {
+    text-align: right;
+  }
+
+  .legend {
+    position: absolute;
+    top: 68px;
+    left: 14px;
+    font-size: 9px;
+    color: rgba(244,248,251,0.75);
+    background: var(--panel);
+    padding: 6px 10px;
+    border-radius: 8px;
+    line-height: 1.6;
+    max-width: 190px;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: rgba(8, 16, 24, 0.72);
+    pointer-events: all;
+    padding: 20px;
+  }
+  .overlay.hidden { display: none; }
+
+  .overlay h1 {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(26px, 7vw, 42px);
+    color: var(--gold);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+    margin: 0 0 6px 0;
+    letter-spacing: 1px;
+  }
+  .overlay h2 {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(20px, 5vw, 30px);
+    color: var(--hot);
+    margin: 0 0 10px 0;
+  }
+  .overlay p.sub {
+    font-size: 12px;
+    color: rgba(244,248,251,0.8);
+    max-width: 320px;
+    margin: 0 0 18px 0;
+  }
+
+  .controls-diagram {
+    display: grid;
+    grid-template-columns: repeat(3, 46px);
+    grid-template-rows: repeat(2, 46px);
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .cdiag-key {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .cdiag-label {
+    grid-column: span 3;
+    font-size: 9px;
+    color: var(--cyan);
+    text-align: center;
+    margin-top: -2px;
+    letter-spacing: 1px;
+  }
+
+  .score-line {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .score-line b { color: var(--gold); }
+
+  .btn {
+    font-family: 'Bungee', cursive;
+    font-size: 15px;
+    padding: 12px 30px;
+    background: linear-gradient(180deg, var(--gold), #d6a230);
+    border: none;
+    border-radius: 10px;
+    color: #1a1a1a;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #a87c1e;
+    letter-spacing: 1px;
+    pointer-events: all;
+  }
+  .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #a87c1e; }
+
+  .dpad {
+    position: absolute;
+    bottom: 18px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+    pointer-events: all;
+  }
+  .dbtn {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--text);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    touch-action: manipulation;
+  }
+  .dbtn:active { background: rgba(79, 224, 208, 0.35); }
+  .dbtn.jump { width: 58px; height: 70px; margin-bottom: 12px; }
+  .dbtn .cap { position: absolute; margin-top: 40px; font-size: 7px; letter-spacing: 1px; color: rgba(244,248,251,0.6); }
+  .dbtn-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .dbtn-wrap .cap { font-size: 7px; letter-spacing: 1px; color: rgba(244,248,251,0.65); margin-top: 4px; }
+
+  .combo-toast {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bungee', cursive;
+    color: var(--gold);
+    font-size: 14px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .combo-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-6px);
+  }
+
+  @media (max-height: 480px) {
+    .legend { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="gameCanvas"></canvas>
+
+<div class="hud">
+  <div class="top-bar">
+    <div class="stat-panel">
+      <div class="label">SCORE</div>
+      <div class="value" id="scoreVal">0</div>
+    </div>
+    <div class="stat-panel coins">
+      <div class="label">COINS</div>
+      <div class="value" id="coinVal">0</div>
+    </div>
+    <div class="stat-panel best-panel">
+      <div class="label">BEST</div>
+      <div class="value" id="bestVal">0</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    ⚠ <b>CONTROLS REVERSED</b><br>
+    <b>◀</b> actually turns RIGHT<br>
+    <b>▶</b> actually turns LEFT<br>
+    <b>▲</b> actually CRAWLS<br>
+    <b>▼</b> actually JUMPS<br>
+    pink-flagged obstacles drift lanes<br>
+    speed climbs fast. good luck.
+  </div>
+
+  <div class="combo-toast" id="comboToast">+10</div>
+
+  <div class="overlay" id="startOverlay">
+    <h1>HARD MODE</h1>
+    <p class="sub">Same track, way more speed, and every control does the OPPOSITE of what it says. Left is right. Jump is crawl. Your instincts are now the enemy.</p>
+    <div class="controls-diagram">
+      <div class="cdiag-key">🡄</div>
+      <div class="cdiag-key">🡅</div>
+      <div class="cdiag-key">🡆</div>
+      <div class="cdiag-key" style="grid-column: 2;">🡇</div>
+      <div class="cdiag-label">ALL INPUTS REVERSED — THINK BACKWARDS</div>
+    </div>
+    <button class="btn" id="startBtn">TAP TO SUFFER</button>
+  </div>
+
+  <div class="overlay hidden" id="overOverlay">
+    <h2>CRASHED!</h2>
+    <div class="score-line">Score: <b id="finalScore">0</b></div>
+    <div class="score-line">Coins: <b id="finalCoins">0</b></div>
+    <div class="score-line" style="margin-bottom:16px;">Best: <b id="finalBest">0</b></div>
+    <button class="btn" id="restartBtn">RUN AGAIN</button>
+  </div>
+
+  <div class="dpad" id="dpad">
+    <div class="dbtn-wrap">
+      <div class="dbtn" id="btnLeft">◀</div>
+      <div class="cap">LEFT</div>
+    </div>
+    <div class="dbtn-wrap">
+      <div class="dbtn jump" id="btnJump">▲</div>
+      <div class="cap">JUMP</div>
+    </div>
+    <div class="dbtn-wrap">
+      <div class="dbtn" id="btnCrawl">▼</div>
+      <div class="cap">CRAWL</div>
+    </div>
+    <div class="dbtn-wrap">
+      <div class="dbtn" id="btnRight">▶</div>
+      <div class="cap">RIGHT</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  // ---------- basic setup ----------
+  const canvas = document.getElementById('gameCanvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xb8492f, 22, 88);
+
+  const camera = new THREE.PerspectiveCamera(62, window.innerWidth/window.innerHeight, 0.1, 200);
+
+  function resize(){
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---------- lights ----------
+  const hemi = new THREE.HemisphereLight(0xffd9a0, 0x552a2a, 0.9);
+  scene.add(hemi);
+  const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+  sun.position.set(-6, 12, 4);
+  scene.add(sun);
+
+  // ---------- lanes / track constants ----------
+  const LANE_W = 2.2;
+  const LANES_X = [-LANE_W, 0, LANE_W];
+  const TRACK_HALF_WIDTH = 4.2;
+
+  // ---------- ground with scrolling canvas texture ----------
+  function makeRoadTexture(){
+    const c = document.createElement('canvas');
+    c.width = 256; c.height = 512;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#4a4f57';
+    ctx.fillRect(0,0,c.width,c.height);
+    // side shoulders
+    ctx.fillStyle = '#3c4551';
+    ctx.fillRect(0,0,30,c.height);
+    ctx.fillRect(c.width-30,0,30,c.height);
+    // lane dashes
+    ctx.fillStyle = '#e8d98a';
+    const laneXs = [c.width/3, (c.width/3)*2];
+    laneXs.forEach(lx => {
+      for (let y=0; y<c.height; y+=48){
+        ctx.fillRect(lx-3, y, 6, 26);
+      }
+    });
+    const tex = new THREE.CanvasTexture(c);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(1, 40);
+    return tex;
+  }
+  const roadTex = makeRoadTexture();
+  const groundGeo = new THREE.PlaneGeometry(TRACK_HALF_WIDTH*2, 4000, 1, 1);
+  const groundMat = new THREE.MeshLambertMaterial({ map: roadTex });
+  const ground = new THREE.Mesh(groundGeo, groundMat);
+  ground.rotation.x = -Math.PI/2;
+  ground.position.z = -1900;
+  scene.add(ground);
+
+  // distant side scenery (simple repeating boxes as "buildings"), purely decorative & static-ish
+  const decoGroup = new THREE.Group();
+  scene.add(decoGroup);
+  function spawnDeco(){
+    const colors = [0x8bb96b, 0x6fa4c9, 0xd9a25c, 0x9c8bc9];
+    for (let side of [-1, 1]){
+      for (let i=0;i<26;i++){
+        const h = 3 + Math.random()*9;
+        const geo = new THREE.BoxGeometry(3+Math.random()*3, h, 3+Math.random()*3);
+        const mat = new THREE.MeshLambertMaterial({ color: colors[Math.floor(Math.random()*colors.length)] });
+        const box = new THREE.Mesh(geo, mat);
+        box.position.set(side*(8 + Math.random()*10), h/2, -i*16 - Math.random()*8);
+        decoGroup.add(box);
+      }
+    }
+  }
+  spawnDeco();
+
+  // ---------- player ----------
+  const player = new THREE.Group();
+  const torsoMat = new THREE.MeshLambertMaterial({ color: 0xff6a3d });
+  const skinMat = new THREE.MeshLambertMaterial({ color: 0xffc79a });
+  const limbMat = new THREE.MeshLambertMaterial({ color: 0x2c3e50 });
+
+  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.62, 0.32), torsoMat);
+  torso.position.y = 0.75;
+  player.add(torso);
+
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 10), skinMat);
+  head.position.y = 1.22;
+  player.add(head);
+
+  function makeLimb(x, isArm){
+    const len = isArm ? 0.5 : 0.55;
+    const geo = new THREE.BoxGeometry(0.14, len, 0.14);
+    geo.translate(0, -len/2, 0);
+    const m = new THREE.Mesh(geo, limbMat);
+    m.position.set(x, isArm ? 1.02 : 0.46, 0);
+    return m;
+  }
+  const armL = makeLimb(-0.34, true);
+  const armR = makeLimb(0.34, true);
+  const legL = makeLimb(-0.16, false);
+  const legR = makeLimb(0.16, false);
+  player.add(armL, armR, legL, legR);
+
+  player.position.set(0, 0, 0);
+  scene.add(player);
+
+  // ---------- player state ----------
+  const state = {
+    lane: 1,
+    x: 0,
+    y: 0,
+    tilt: 0,
+    isJumping: false,
+    jumpVel: 0,
+    isCrawling: false,
+    crawlTimer: 0,
+    running: false,
+    over: false,
+    score: 0,
+    coins: 0,
+    best: 0,
+    speed: 18,
+    dist: 0,
+    lastSpawnDist: 0,
+    runPhase: 0
+  };
+
+  const GRAVITY = 26;
+  const JUMP_V = 9.2;
+  const CRAWL_DURATION = 0.55;
+
+  // ---------- obstacle / coin management ----------
+  const activeObjects = []; // { mesh, lane, type, z, resolved, isCoin }
+  const SPAWN_Z = -70;
+  const REMOVE_Z = 9;
+
+  const matLow = new THREE.MeshLambertMaterial({ color: 0xb2452f });
+  const matHighBar = new THREE.MeshLambertMaterial({ color: 0x3d6fb0 });
+  const matHighPost = new THREE.MeshLambertMaterial({ color: 0x2a4d80 });
+  const matTrain = new THREE.MeshLambertMaterial({ color: 0x7a2b2b });
+  const matTrainWin = new THREE.MeshLambertMaterial({ color: 0xbfe6ff });
+  const matCoin = new THREE.MeshLambertMaterial({ color: 0xffd23f });
+
+  function buildLowObstacle(){
+    const g = new THREE.Group();
+    const box = new THREE.Mesh(new THREE.BoxGeometry(LANE_W*0.82, 0.6, 0.5), matLow);
+    box.position.y = 0.3;
+    g.add(box);
+    return g;
+  }
+  function buildHighObstacle(){
+    const g = new THREE.Group();
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(LANE_W*0.82, 0.26, 0.4), matHighBar);
+    bar.position.y = 1.28;
+    g.add(bar);
+    const post1 = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.28, 0.12), matHighPost);
+    post1.position.set(-LANE_W*0.38, 0.64, 0);
+    const post2 = post1.clone();
+    post2.position.x = LANE_W*0.38;
+    g.add(post1, post2);
+    return g;
+  }
+  function buildTrainObstacle(){
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.BoxGeometry(LANE_W*0.92, 2.1, 1.4), matTrain);
+    body.position.y = 1.08;
+    g.add(body);
+    for (let i=-1;i<=1;i+=2){
+      const win = new THREE.Mesh(new THREE.BoxGeometry(LANE_W*0.5, 0.5, 0.05), matTrainWin);
+      win.position.set(0, 1.4, i*0.71);
+      g.add(win);
+    }
+    return g;
+  }
+  function buildCoin(){
+    const coin = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.08, 8, 16), matCoin);
+    coin.rotation.x = Math.PI/2;
+    return coin;
+  }
+
+  const markerMat = new THREE.MeshBasicMaterial({ color: 0xff2fd6, transparent: true, opacity: 0.9 });
+  function buildMoverMarker(){
+    const m = new THREE.Mesh(new THREE.OctahedronGeometry(0.16, 0), markerMat.clone());
+    m.position.y = 2.5;
+    return m;
+  }
+
+  function spawnObstacle(lane, type, zOverride, isMover){
+    let mesh;
+    if (type === 'low') mesh = buildLowObstacle();
+    else if (type === 'high') mesh = buildHighObstacle();
+    else mesh = buildTrainObstacle();
+    const z = zOverride !== undefined ? zOverride : SPAWN_Z;
+    mesh.position.set(LANES_X[lane], 0, z);
+
+    let marker = null;
+    if (isMover){
+      marker = buildMoverMarker();
+      mesh.add(marker);
+    }
+
+    scene.add(mesh);
+    activeObjects.push({
+      mesh, lane, type, resolved: false, isCoin: false,
+      mover: !!isMover, marker, locked: !isMover,
+      moveTimer: 0.15 + Math.random()*0.2
+    });
+  }
+
+  function spawnCoinArc(lane, zStart, count, style){
+    for (let i=0;i<count;i++){
+      const coin = buildCoin();
+      const z = zStart - i*1.1;
+      let y = 0.9;
+      if (style === 'high') y = 1.55;
+      if (style === 'low') y = 0.35;
+      coin.position.set(LANES_X[lane], y, z);
+      scene.add(coin);
+      activeObjects.push({ mesh: coin, lane, type: 'coin', resolved: false, isCoin: true });
+    }
+  }
+
+  // curated, guaranteed-solvable segment patterns
+  function spawnSegment(){
+    const z = SPAWN_Z;
+    const roll = Math.random();
+
+    if (roll < 0.30){
+      // single lane blocked, random type, others free -> always safe.
+      // ~50% chance it's a "mover" that shifts lanes on the way in (marked by a pink beacon)
+      // to keep players from lane-planning too early — it locks in place well before reaching you.
+      const lane = Math.floor(Math.random()*3);
+      const type = ['low','high','full'][Math.floor(Math.random()*3)];
+      const isMover = Math.random() < 0.75;
+      spawnObstacle(lane, type === 'full' ? 'full' : type, z, isMover);
+      const freeLane = (lane+1)%3;
+      spawnCoinArc(freeLane, z, 3, 'ground');
+    } else if (roll < 0.5){
+      // two lanes are trains, one lane open -> forces a specific lane
+      const openLane = Math.floor(Math.random()*3);
+      for (let l=0;l<3;l++){
+        if (l !== openLane) spawnObstacle(l, 'full', z);
+      }
+      spawnCoinArc(openLane, z, 3, 'ground');
+    } else if (roll < 0.68){
+      // all lanes low -> must jump regardless of lane
+      for (let l=0;l<3;l++) spawnObstacle(l, 'low', z);
+      const lane = Math.floor(Math.random()*3);
+      spawnCoinArc(lane, z, 3, 'high');
+    } else if (roll < 0.86){
+      // all lanes high -> must crawl regardless of lane
+      for (let l=0;l<3;l++) spawnObstacle(l, 'high', z);
+      const lane = Math.floor(Math.random()*3);
+      spawnCoinArc(lane, z, 3, 'low');
+    } else {
+      // pure coin bonus segment, no obstacles
+      const lane = Math.floor(Math.random()*3);
+      spawnCoinArc(lane, z, 5, 'ground');
+    }
+  }
+
+  function clearObjects(){
+    for (const o of activeObjects){
+      scene.remove(o.mesh);
+    }
+    activeObjects.length = 0;
+  }
+
+  // ---------- controls ----------
+  function changeLane(dir){
+    if (state.over) return;
+    state.lane = Math.min(2, Math.max(0, state.lane + dir));
+    state.tilt = dir * -0.35;
+  }
+  function doJump(){
+    if (state.over) return;
+    if (!state.isJumping && !state.isCrawling){
+      state.isJumping = true;
+      state.jumpVel = JUMP_V;
+    }
+  }
+  function doCrawl(){
+    if (state.over) return;
+    if (!state.isJumping && !state.isCrawling){
+      state.isCrawling = true;
+      state.crawlTimer = CRAWL_DURATION;
+    }
+  }
+
+  // HARD MODE: every input is deliberately reversed from what it's labeled.
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowLeft','KeyA'].includes(e.code)) changeLane(1);
+    else if (['ArrowRight','KeyD'].includes(e.code)) changeLane(-1);
+    else if (['ArrowUp','KeyW','Space'].includes(e.code)) doCrawl();
+    else if (['ArrowDown','KeyS'].includes(e.code)) doJump();
+  });
+
+  document.getElementById('btnLeft').addEventListener('click', () => changeLane(1));
+  document.getElementById('btnRight').addEventListener('click', () => changeLane(-1));
+  document.getElementById('btnJump').addEventListener('click', doCrawl);
+  document.getElementById('btnCrawl').addEventListener('click', doJump);
+
+  let touchStartX = 0, touchStartY = 0, touchActive = false;
+  window.addEventListener('touchstart', (e) => {
+    if (e.target.closest('#dpad') || e.target.closest('.overlay')) return;
+    touchActive = true;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', (e) => {
+    if (!touchActive) return;
+    touchActive = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 32){
+      changeLane(dx > 0 ? -1 : 1);
+    } else if (Math.abs(dy) > 32){
+      if (dy < 0) doCrawl(); else doJump();
+    }
+  }, { passive: true });
+
+  // ---------- collision ----------
+  function comboToast(text){
+    const el = document.getElementById('comboToast');
+    el.textContent = text;
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+    clearTimeout(comboToast._t);
+    comboToast._t = setTimeout(() => el.classList.remove('show'), 500);
+  }
+
+  function checkCollision(o){
+    if (o.lane !== state.lane) return false;
+    if (o.type === 'coin') return false;
+    if (o.type === 'full') return true;
+    if (o.type === 'low') return !state.isJumping;
+    if (o.type === 'high') return !state.isCrawling;
+    return false;
+  }
+
+  function gameOver(){
+    state.over = true;
+    state.running = false;
+    state.best = Math.max(state.best, Math.floor(state.score));
+    document.getElementById('finalScore').textContent = Math.floor(state.score);
+    document.getElementById('finalCoins').textContent = state.coins;
+    document.getElementById('finalBest').textContent = state.best;
+    document.getElementById('overOverlay').classList.remove('hidden');
+  }
+
+  // ---------- reset / start ----------
+  function resetGame(){
+    clearObjects();
+    state.lane = 1;
+    state.x = 0;
+    state.y = 0;
+    state.tilt = 0;
+    state.isJumping = false;
+    state.jumpVel = 0;
+    state.isCrawling = false;
+    state.crawlTimer = 0;
+    state.over = false;
+    state.score = 0;
+    state.coins = 0;
+    state.speed = 18;
+    state.dist = 0;
+    state.lastSpawnDist = 0;
+    player.position.set(0, 0, 0);
+    player.rotation.set(0,0,0);
+    document.getElementById('overOverlay').classList.add('hidden');
+    document.getElementById('scoreVal').textContent = '0';
+    document.getElementById('coinVal').textContent = '0';
+    document.getElementById('bestVal').textContent = state.best;
+  }
+
+  document.getElementById('startBtn').addEventListener('click', () => {
+    document.getElementById('startOverlay').classList.add('hidden');
+    resetGame();
+    state.running = true;
+  });
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    resetGame();
+    state.running = true;
+  });
+
+  // ---------- main loop ----------
+  const clock = new THREE.Clock();
+
+  function update(dt){
+    if (!state.running) return;
+
+    // difficulty ramp — hard mode: faster base, steeper climb, higher ceiling
+    state.speed = Math.min(46, 18 + state.score * 0.0045);
+    const travel = state.speed * dt;
+    state.dist += travel;
+    state.score += travel * 1.4;
+    document.getElementById('scoreVal').textContent = Math.floor(state.score);
+
+    // spawn logic — gaps stay fair (always solvable) but tighten harder with speed
+    const spawnGap = Math.max(7.5, 14 - state.speed*0.2);
+    if (state.dist - state.lastSpawnDist > spawnGap){
+      state.lastSpawnDist = state.dist;
+      spawnSegment();
+    }
+
+    // scroll road texture
+    roadTex.offset.y -= travel * 0.045;
+
+    // move deco
+    decoGroup.children.forEach(b => {
+      b.position.z += travel;
+      if (b.position.z > 12){
+        b.position.z -= 26*16;
+      }
+    });
+
+    // move active objects, check collisions
+    for (let i = activeObjects.length - 1; i >= 0; i--){
+      const o = activeObjects[i];
+      o.mesh.position.z += travel;
+      if (o.isCoin){
+        o.mesh.rotation.z += dt * 4;
+      }
+
+      if (o.mover){
+        if (!o.locked){
+          if (o.mesh.position.z > -8){
+            o.locked = true; // lock the lane with a fair reaction window before it reaches the player
+          } else {
+            o.moveTimer -= dt;
+            if (o.moveTimer <= 0){
+              let newLane = Math.floor(Math.random()*3);
+              if (newLane === o.lane) newLane = (newLane+1)%3;
+              o.lane = newLane;
+              o.moveTimer = 0.22 + Math.random()*0.28;
+            }
+          }
+        }
+        o.mesh.position.x += (LANES_X[o.lane] - o.mesh.position.x) * Math.min(1, dt*20);
+        if (o.marker){
+          o.marker.rotation.y += dt*6;
+          o.marker.material.opacity = o.locked ? 0.2 : (0.55 + Math.sin(performance.now()*0.01)*0.35);
+        }
+      }
+
+      const z = o.mesh.position.z;
+      if (!o.resolved && z > -0.6 && z < 0.6){
+        o.resolved = true;
+        if (o.isCoin){
+          if (o.lane === state.lane){
+            state.coins++;
+            state.score += 10;
+            document.getElementById('coinVal').textContent = state.coins;
+            comboToast('+10');
+            scene.remove(o.mesh);
+            activeObjects.splice(i,1);
+            continue;
+          }
+        } else {
+          if (checkCollision(o)){
+            gameOver();
+          }
+        }
+      }
+
+      if (z > REMOVE_Z){
+        scene.remove(o.mesh);
+        activeObjects.splice(i,1);
+      }
+    }
+
+    // player lane x
+    const targetX = LANES_X[state.lane];
+    state.x += (targetX - state.x) * Math.min(1, dt * 10);
+    state.tilt *= 0.85;
+
+    // jump physics
+    if (state.isJumping){
+      state.y += state.jumpVel * dt;
+      state.jumpVel -= GRAVITY * dt;
+      if (state.y <= 0){
+        state.y = 0;
+        state.isJumping = false;
+        state.jumpVel = 0;
+      }
+    }
+
+    // crawl timer
+    if (state.isCrawling){
+      state.crawlTimer -= dt;
+      if (state.crawlTimer <= 0){
+        state.isCrawling = false;
+      }
+    }
+
+    // apply to mesh
+    player.position.x = state.x;
+    player.position.y = state.y;
+    player.rotation.z = state.tilt;
+
+    if (state.isCrawling){
+      player.rotation.x = -0.95;
+      player.position.y = state.y - 0.25;
+    } else {
+      player.rotation.x *= 0.7;
+    }
+
+    // running limb animation
+    if (!state.isCrawling){
+      state.runPhase += dt * (10 + state.speed*0.3);
+      const swing = Math.sin(state.runPhase) * 0.5;
+      legL.rotation.x = swing;
+      legR.rotation.x = -swing;
+      armL.rotation.x = -swing;
+      armR.rotation.x = swing;
+    }
+
+    // camera follow
+    camera.position.x += (state.x*0.6 - camera.position.x) * Math.min(1, dt*6);
+    camera.position.y = 3.4 + (state.isCrawling ? -0.15 : 0);
+    camera.position.z = 6.2;
+    camera.lookAt(state.x*0.4, 1.1, -12);
+  }
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const dt = Math.min(clock.getDelta(), 0.05);
+    update(dt);
+    renderer.render(scene, camera);
+  }
+
+  // initial camera pose (for start screen backdrop)
+  camera.position.set(0, 3.4, 6.2);
+  camera.lookAt(0, 1.1, -12);
+
+  animate();
+})();
+</script>
+
+</body>
+</html>
