@@ -10,23 +10,24 @@
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
+- Team Lead: anna mariya - iccscem
+- Member 2: jamsha farhana - iccscem
 - Member 3: [Name] - [College]
 
-### Project Description
-[2-3 lines about what your project does]
+### Project Description 
+impossible runner 3D is a funny and tricky 3D running game where the players must run, avoid obstacles,and reach the finish line .
+The twist is that the controls are reversed,making the game intentionally confusing and challenging
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+Normal running games are too easy because the controls work exactly as expected.We wanted to solve the completely unnecessary problem of making a simple running game confusing
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+We created impossible runner 3D,where the players movement is reversed. If the player presses right,the character moves left.this creates a funny and unexpectedly difficult game experience.
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
+- 
 - [Frameworks used]
 - [Libraries used]
 - [Tools used]
