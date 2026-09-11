@@ -2,7 +2,7 @@
 
 
 
-# [ANGER DUMB] 🎯
+# ANGER DUMB🎯
 
 
 ## Basic Details
