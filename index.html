@@ -1,1 +1,259 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anger Dump 😤</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      padding: 25px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 5px;
+    }
+
+    p {
+      color: #bbb;
+    }
+
+    .upload {
+      margin: 20px;
+    }
+
+    input {
+      display: none;
+    }
+
+    .upload-label {
+      display: inline-block;
+      padding: 14px 25px;
+      background: #ff4757;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #game {
+      display: none;
+      margin-top: 25px;
+    }
+
+    #photoBox {
+      width: 280px;
+      height: 280px;
+      margin: auto;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #222;
+      position: relative;
+      border: 3px solid white;
+    }
+
+    #photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #emoji {
+      position: absolute;
+      font-size: 80px;
+      display: none;
+      animation: hit 0.5s ease;
+    }
+
+    @keyframes hit {
+      0% {
+        transform: scale(1) rotate(0);
+      }
+
+      50% {
+        transform: scale(1.5) rotate(20deg);
+      }
+
+      100% {
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #anger {
+      margin: 25px auto;
+      width: 280px;
+      height: 18px;
+      background: #333;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    #angerBar {
+      width: 0%;
+      height: 100%;
+      background: #ff4757;
+      transition: 0.2s;
+    }
+
+    #message {
+      font-size: 20px;
+      min-height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>😤 ANGER DUMP</h1>
+    <p>Upload a photo. Release your useless anger 😂</p>
+  </header>
+
+  <div class="upload">
+    <label class="upload-label">
+      📸 Upload Photo
+      <input type="file" id="fileInput" accept="image/*">
+    </label>
+  </div>
+
+  <div id="game">
+
+    <div id="photoBox">
+      <img id="photo">
+      <div id="emoji"></div>
+    </div>
+
+    <div id="anger">
+      <div id="angerBar"></div>
+    </div>
+
+    <div class="buttons">
+
+      <button onclick="action('🛏️', 'Pillow Attack!')">
+        🛏️ Pillow
+      </button>
+
+      <button onclick="action('🍅', 'Tomato Attack!')">
+        🍅 Tomato
+      </button>
+
+      <button onclick="action('🐔', 'HONK HONK!')">
+        🐔 Chicken
+      </button>
+
+      <button onclick="action('💦', 'Water Balloon!')">
+        💦 Water
+      </button>
+
+    </div>
+
+    <div id="message"></div>
+
+  </div>
+
+
+  <script>
+
+    const fileInput = document.getElementById("fileInput");
+    const photo = document.getElementById("photo");
+    const game = document.getElementById("game");
+    const emoji = document.getElementById("emoji");
+    const message = document.getElementById("message");
+    const angerBar = document.getElementById("angerBar");
+
+    let anger = 0;
+
+    fileInput.addEventListener("change", function () {
+
+      const file = this.files[0];
+
+      if (file) {
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+
+          photo.src = e.target.result;
+          game.style.display = "block";
+
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+
+
+    function action(icon, text) {
+
+      anger += 10;
+
+      if (anger > 100) {
+        anger = 100;
+      }
+
+      angerBar.style.width = anger + "%";
+
+      emoji.innerText = icon;
+
+      emoji.style.display = "block";
+
+      // Random position
+      emoji.style.left =
+        Math.random() * 180 + "px";
+
+      emoji.style.top =
+        Math.random() * 180 + "px";
+
+      emoji.style.animation = "none";
+
+      setTimeout(() => {
+        emoji.style.animation = "hit 0.5s ease";
+      }, 10);
+
+      message.innerText = text;
+
+      if (anger === 100) {
+
+        message.innerText =
+          "😂 Congratulations! You wasted all your anger!";
+
+      }
+    }
+
+  </script>
+
+</body>
+</html>
