@@ -17,7 +17,6 @@
 
 * **Team Lead:** Anna Mariya – ICCSCEM
 * **Member 2:** Jamsha Farhana – ICCSCEM
-* **Member 3:** [Add Name] – [College]
 
 ---
 
