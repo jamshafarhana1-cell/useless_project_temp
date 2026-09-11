@@ -2,11 +2,11 @@
 
 
 
-# ANGER DUMB 🎯
+# RUNNER3D 🎯
 
 
 ## Basic Details
-### Team Name: [JAMSHAA ANNA]
+### Team Name: JAMSHAA ANNA
 
 
 ### Team Members
